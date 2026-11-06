@@ -1,0 +1,321 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  MANAGER
+  BARBER
+  RECEPTION
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum SubscriptionStatus {
+  PENDING_PAYMENT
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  COMPLETED
+  CANCELED
+  NO_SHOW
+}
+
+enum AppointmentSource {
+  ONLINE
+  PANEL
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum CommissionStatus {
+  PENDING
+  PAID
+}
+
+model Tenant {
+  id          String       @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String       @unique
+  phone       String?
+  address     String?
+  status      TenantStatus @default(ACTIVE)
+  trialEndsAt DateTime     @map("trial_ends_at")
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  memberships   Membership[]
+  professionals Professional[]
+  services      Service[]
+  clients       Client[]
+  appointments  Appointment[]
+  transactions  Transaction[]
+  subscription  Subscription?
+
+  @@map("tenants")
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  memberships   Membership[]
+  professionals Professional[]
+
+  @@map("users")
+}
+
+model Membership {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tenantId])
+  @@index([tenantId])
+  @@map("memberships")
+}
+
+model Professional {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  userId        String?  @map("user_id") @db.Uuid
+  name          String
+  // Comissao em basis points: 3000 = 30,00%
+  commissionBps Int      @default(0) @map("commission_bps")
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  tenant       Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user         User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
+  services     ProfessionalService[]
+  workingHours WorkingHour[]
+  timeBlocks   TimeBlock[]
+  appointments Appointment[]
+  commissions  Commission[]
+
+  @@index([tenantId])
+  @@map("professionals")
+}
+
+model Service {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  name       String
+  durationMin Int     @map("duration_min")
+  priceCents Int      @map("price_cents")
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  tenant        Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  professionals ProfessionalService[]
+  appointments  Appointment[]
+
+  @@index([tenantId])
+  @@map("services")
+}
+
+model ProfessionalService {
+  id               String @id @default(uuid()) @db.Uuid
+  tenantId         String @map("tenant_id") @db.Uuid
+  professionalId   String @map("professional_id") @db.Uuid
+  serviceId        String @map("service_id") @db.Uuid
+  customPriceCents Int?   @map("custom_price_cents")
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  service      Service      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([professionalId, serviceId])
+  @@index([tenantId])
+  @@map("professional_services")
+}
+
+model WorkingHour {
+  id             String  @id @default(uuid()) @db.Uuid
+  tenantId       String  @map("tenant_id") @db.Uuid
+  professionalId String  @map("professional_id") @db.Uuid
+  // 0 = domingo ... 6 = sabado
+  weekday        Int
+  // Formato "HH:mm", no fuso da barbearia
+  startTime      String  @map("start_time")
+  endTime        String  @map("end_time")
+  breakStart     String? @map("break_start")
+  breakEnd       String? @map("break_end")
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@unique([professionalId, weekday])
+  @@index([tenantId])
+  @@map("working_hours")
+}
+
+model TimeBlock {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  professionalId String   @map("professional_id") @db.Uuid
+  startAt        DateTime @map("start_at")
+  endAt          DateTime @map("end_at")
+  reason         String?
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+
+  @@index([professionalId, startAt])
+  @@index([tenantId])
+  @@map("time_blocks")
+}
+
+model Client {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  name      String
+  phone     String
+  email     String?
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@unique([tenantId, phone])
+  @@map("clients")
+}
+
+model Appointment {
+  id             String            @id @default(uuid()) @db.Uuid
+  tenantId       String            @map("tenant_id") @db.Uuid
+  clientId       String            @map("client_id") @db.Uuid
+  professionalId String            @map("professional_id") @db.Uuid
+  serviceId      String            @map("service_id") @db.Uuid
+  startAt        DateTime          @map("start_at")
+  endAt          DateTime          @map("end_at")
+  status         AppointmentStatus @default(SCHEDULED)
+  source         AppointmentSource @default(PANEL)
+  priceCents     Int               @map("price_cents")
+  createdAt      DateTime          @default(now()) @map("created_at")
+
+  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  client       Client       @relation(fields: [clientId], references: [id])
+  professional Professional @relation(fields: [professionalId], references: [id])
+  service      Service      @relation(fields: [serviceId], references: [id])
+  commission   Commission?
+  transactions Transaction[]
+
+  @@index([professionalId, startAt])
+  @@index([tenantId, startAt])
+  @@map("appointments")
+}
+
+model Transaction {
+  id            String          @id @default(uuid()) @db.Uuid
+  tenantId      String          @map("tenant_id") @db.Uuid
+  type          TransactionType
+  category      String
+  amountCents   Int             @map("amount_cents")
+  paymentMethod String?         @map("payment_method")
+  appointmentId String?         @map("appointment_id") @db.Uuid
+  occurredAt    DateTime        @map("occurred_at")
+  createdAt     DateTime        @default(now()) @map("created_at")
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  appointment Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, occurredAt])
+  @@map("transactions")
+}
+
+model Commission {
+  id             String           @id @default(uuid()) @db.Uuid
+  tenantId       String           @map("tenant_id") @db.Uuid
+  appointmentId  String           @unique @map("appointment_id") @db.Uuid
+  professionalId String           @map("professional_id") @db.Uuid
+  amountCents    Int              @map("amount_cents")
+  status         CommissionStatus @default(PENDING)
+  createdAt      DateTime         @default(now()) @map("created_at")
+
+  appointment  Appointment  @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  professional Professional @relation(fields: [professionalId], references: [id])
+
+  @@index([tenantId])
+  @@index([professionalId])
+  @@map("commissions")
+}
+
+model Plan {
+  id                   String  @id @default(uuid()) @db.Uuid
+  name                 String
+  priceCents           Int     @map("price_cents")
+  maxProfessionals     Int     @map("max_professionals")
+  maxAppointmentsMonth Int?    @map("max_appointments_month")
+  active               Boolean @default(true)
+
+  subscriptions Subscription[]
+
+  @@map("plans")
+}
+
+model Subscription {
+  id                    String             @id @default(uuid()) @db.Uuid
+  tenantId              String             @unique @map("tenant_id") @db.Uuid
+  planId                String?            @map("plan_id") @db.Uuid
+  status                SubscriptionStatus @default(PENDING_PAYMENT)
+  gatewayCustomerId     String?            @map("gateway_customer_id")
+  gatewaySubscriptionId String?            @map("gateway_subscription_id")
+  currentPeriodEnd      DateTime?          @map("current_period_end")
+  createdAt             DateTime           @default(now()) @map("created_at")
+  updatedAt             DateTime           @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  plan   Plan?  @relation(fields: [planId], references: [id])
+
+  @@map("subscriptions")
+}
+
+model WebhookEvent {
+  id          String    @id @default(uuid()) @db.Uuid
+  provider    String
+  externalId  String    @map("external_id")
+  payload     Json
+  processedAt DateTime? @map("processed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@unique([provider, externalId])
+  @@map("webhook_events")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  action    String
+  entity    String
+  before    Json?
+  after     Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId, createdAt])
+  @@map("audit_logs")
+}
