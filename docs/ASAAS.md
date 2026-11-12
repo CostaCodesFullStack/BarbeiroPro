@@ -11,11 +11,14 @@ serviços e profissionais depois do cartão aceito.
 2. No `.env`:
    ```
    ASAAS_API_KEY=<chave do sandbox>
-   ASAAS_BASE_URL=<URL base da API v3 do sandbox, conforme a documentação>
+   ASAAS_BASE_URL=https://api-sandbox.asaas.com/v3
    ASAAS_WEBHOOK_TOKEN=<gere: openssl rand -hex 24>
    ```
    O token do webhook é um segredo **diferente** da chave de API. Nunca reutilize a chave de API.
+   Em desenvolvimento, testes e servidor local, o cliente aceita somente essa URL oficial e uma chave Sandbox com prefixo `$aact_hmlg_`. Chaves antigas sem prefixo identificável precisam ser substituídas por uma chave Sandbox atual; não use chave de produção localmente.
 3. Para testar o cartão, use os **cartões de teste do sandbox** listados na documentação do Asaas.
+
+O cliente não escolhe nem substitui o ambiente automaticamente. Sem configuração válida, a operação falha antes de fazer uma requisição. A configuração de produção continua sendo fornecida pelo ambiente de produção, sem fallback a partir das variáveis locais.
 
 ## 2. Webhook
 No painel do Asaas (Integrações → Webhooks), crie um webhook:

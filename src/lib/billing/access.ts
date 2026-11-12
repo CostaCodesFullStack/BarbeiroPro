@@ -11,6 +11,8 @@ export type AccessInput = {
   subscriptionStatus: "PENDING_PAYMENT" | "TRIALING" | "ACTIVE" | "PAST_DUE" | "CANCELED" | null;
   trialEndsAt: Date;
   currentPeriodEnd: Date | null;
+  accessEndsAt?: Date | null;
+  cancellationConfirmed?: boolean;
   now?: Date;
 };
 
@@ -18,12 +20,16 @@ export type AccessInput = {
  * A barbearia tem acesso liberado (cadastro, agenda, página pública)?
  * - aguardando pagamento / cancelada / sem assinatura / suspensa: não
  * - teste grátis: até o fim do teste (+ folga)
- * - assinatura ativa: sempre
+ * - assinatura ativa: liberada, exceto quando o cancelamento confirmado tem prazo de acesso
  * - em atraso: durante a tolerância
  */
 export function canTakeBookings(i: AccessInput): boolean {
   const now = (i.now ?? new Date()).getTime();
   if (i.tenantStatus !== "ACTIVE") return false;
+
+  if (i.cancellationConfirmed) {
+    return i.accessEndsAt ? now < i.accessEndsAt.getTime() : false;
+  }
 
   switch (i.subscriptionStatus) {
     case "ACTIVE":

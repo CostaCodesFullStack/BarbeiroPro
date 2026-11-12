@@ -40,7 +40,7 @@ export async function requireWriteAuth(action?: Action): Promise<Session> {
     select: {
       status: true,
       trialEndsAt: true,
-      subscription: { select: { status: true, currentPeriodEnd: true } },
+      subscription: { select: { status: true, currentPeriodEnd: true, accessEndsAt: true, cancellationConfirmed: true } },
     },
   });
 
@@ -51,6 +51,8 @@ export async function requireWriteAuth(action?: Action): Promise<Session> {
       subscriptionStatus: tenant.subscription?.status ?? null,
       trialEndsAt: tenant.trialEndsAt,
       currentPeriodEnd: tenant.subscription?.currentPeriodEnd ?? null,
+      accessEndsAt: tenant.subscription?.accessEndsAt ?? null,
+      cancellationConfirmed: tenant.subscription?.cancellationConfirmed ?? false,
     });
 
   if (!allowed) {

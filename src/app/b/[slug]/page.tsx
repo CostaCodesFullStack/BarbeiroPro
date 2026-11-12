@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import BookingClient from "@/components/BookingClient";
+import PublicShell from "@/components/public/PublicShell";
 import { findPublicTenant } from "@/lib/public/guard";
 
 export const dynamic = "force-dynamic";
@@ -19,17 +20,23 @@ export default async function PublicBookingPage({ params }: Props) {
 
   if (!tenant.bookable) {
     return (
-      <main className="book">
-        <div className="card confirm">
-          <h1>{tenant.name}</h1>
-          <p className="muted">
-            Os agendamentos online estão indisponíveis no momento. Entre em contato diretamente com a barbearia
-            {tenant.phone ? `: ${tenant.phone}` : "."}
-          </p>
-        </div>
-      </main>
+      <PublicShell mode="booking">
+        <main className="book">
+          <div className="card confirm">
+            <h1>{tenant.name}</h1>
+            <p className="muted">
+              Os agendamentos online estão indisponíveis no momento. Entre em contato diretamente com a barbearia
+              {tenant.phone ? `: ${tenant.phone}` : "."}
+            </p>
+          </div>
+        </main>
+      </PublicShell>
     );
   }
 
-  return <BookingClient slug={slug} />;
+  return (
+    <PublicShell mode="booking">
+      <BookingClient slug={slug} />
+    </PublicShell>
+  );
 }

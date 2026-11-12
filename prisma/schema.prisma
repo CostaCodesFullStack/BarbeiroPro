@@ -285,6 +285,11 @@ model Subscription {
   gatewayCustomerId     String?            @map("gateway_customer_id")
   gatewaySubscriptionId String?            @map("gateway_subscription_id")
   currentPeriodEnd      DateTime?          @map("current_period_end")
+  accessEndsAt          DateTime?          @map("access_ends_at")
+  cancellationConfirmed Boolean            @default(false) @map("cancellation_confirmed")
+  checkoutReference     String?            @unique @map("checkout_reference")
+  checkoutStatus        String?            @map("checkout_status")
+  checkoutFirstChargeDate String?           @map("checkout_first_charge_date") @db.VarChar(10)
   createdAt             DateTime           @default(now()) @map("created_at")
   updatedAt             DateTime           @updatedAt @map("updated_at")
 

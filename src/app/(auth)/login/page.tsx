@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api, errorMessage } from "@/lib/client-api";
+import PublicShell from "@/components/public/PublicShell";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,30 +38,32 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="auth">
-      <form className="card" onSubmit={onSubmit}>
-        <h1>Entrar</h1>
-        {fromSignup && (
-          <div className="banner">Este e-mail já tem cadastro. Digite sua senha para entrar.</div>
-        )}
-        <label htmlFor="email">E-mail</label>
-        <input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        <label htmlFor="password">Senha</label>
-        <input
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          autoFocus={fromSignup}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <div className="error" role="alert">{error}</div>}
-        <button className="primary" type="submit" disabled={loading}>{loading ? "Entrando..." : "Entrar"}</button>
-        <p className="muted">
-          Ainda não tem conta? <Link href="/cadastro">Comece o teste grátis</Link>
-        </p>
-      </form>
-    </main>
+    <PublicShell>
+      <main className="auth">
+        <form className="card" onSubmit={onSubmit}>
+          <h1>Entrar</h1>
+          {fromSignup && (
+            <div className="banner">Este e-mail já tem cadastro. Digite sua senha para entrar.</div>
+          )}
+          <label htmlFor="email">E-mail</label>
+          <input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          <label htmlFor="password">Senha</label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            autoFocus={fromSignup}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {error && <div className="error" role="alert">{error}</div>}
+          <button className="primary" type="submit" disabled={loading}>{loading ? "Entrando..." : "Entrar"}</button>
+          <p className="muted">
+            Ainda não tem conta? <Link href="/cadastro">Comece o teste grátis</Link>
+          </p>
+        </form>
+      </main>
+    </PublicShell>
   );
 }

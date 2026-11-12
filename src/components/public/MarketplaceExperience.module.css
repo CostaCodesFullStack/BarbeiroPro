@@ -1,0 +1,472 @@
+.main {
+  padding: 44px 0 72px;
+}
+
+.hero,
+.directory,
+.ownerCallout {
+  width: min(1200px, calc(100% - 40px));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.85fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 72px);
+  padding: clamp(30px, 5vw, 66px);
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: linear-gradient(118deg, #fff 0%, #fff 57%, #f1e5dd 100%);
+  box-shadow: var(--shadow-soft);
+}
+
+.hero::after {
+  position: absolute;
+  z-index: -1;
+  top: -180px;
+  right: -126px;
+  width: 350px;
+  height: 350px;
+  border: 1px solid rgb(168 78 38 / 13%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 30px rgb(168 78 38 / 4%), 0 0 0 62px rgb(168 78 38 / 3%);
+  content: "";
+  pointer-events: none;
+}
+
+.heroCopy,
+.searchPanel {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow,
+.sectionKicker,
+.searchKicker,
+.cardEyebrow,
+.metaLabel {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.eyebrow,
+.sectionKicker,
+.searchKicker {
+  color: var(--brand);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 20px;
+}
+
+.eyebrow span {
+  color: var(--muted);
+}
+
+.heroTitle {
+  max-width: 11ch;
+  margin: 0 0 18px;
+  font-size: clamp(40px, 5.1vw, 68px);
+  font-weight: 760;
+  letter-spacing: -0.065em;
+  line-height: 1.02;
+}
+
+.heroTitle span {
+  color: var(--brand);
+}
+
+.heroDescription {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(16px, 1.7vw, 18px);
+  line-height: 1.65;
+}
+
+.searchPanel {
+  padding: clamp(22px, 3vw, 30px);
+  border-radius: 18px;
+  box-shadow: 0 18px 46px rgb(24 24 27 / 9%);
+}
+
+.searchHeading {
+  margin-bottom: 22px;
+}
+
+.searchKicker {
+  margin-bottom: 7px;
+}
+
+.searchHeading h2 {
+  margin: 0 0 7px;
+  font-size: 22px;
+  letter-spacing: -0.035em;
+}
+
+.searchHeading > p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.searchForm {
+  display: grid;
+  gap: 14px;
+}
+
+.searchForm :global(.field) {
+  margin: 0;
+}
+
+.searchForm :global(.field label) {
+  margin-bottom: 6px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.searchForm input {
+  min-height: 48px;
+  border-color: #d8d3ce;
+  background: #fff;
+  font-size: 15px;
+}
+
+.searchForm input:hover {
+  border-color: #b8afa8;
+}
+
+.searchButton {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 2px;
+}
+
+.clearFilters {
+  display: inline-flex;
+  margin-top: 16px;
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.directory {
+  margin-top: clamp(56px, 8vw, 88px);
+}
+
+.directoryHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.sectionKicker {
+  margin-bottom: 8px;
+}
+
+.directoryHeading h2,
+.ownerCallout h2 {
+  margin: 0 0 8px;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 730;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.directoryHeading p:last-child,
+.ownerCallout p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.resultsCount {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.barbershopCard {
+  display: flex;
+  min-width: 0;
+  min-height: 276px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 23px;
+  border-radius: 16px;
+  box-shadow: 0 6px 22px rgb(24 24 27 / 4%);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.barbershopCard:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--brand) 40%, var(--border));
+  box-shadow: 0 14px 32px rgb(24 24 27 / 8%);
+}
+
+.cardContent {
+  min-width: 0;
+}
+
+.cardEyebrow,
+.metaLabel {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.cardEyebrow {
+  margin-bottom: 7px;
+}
+
+.cardTitle {
+  overflow-wrap: anywhere;
+  margin: 0 0 14px;
+  font-size: 21px;
+  font-weight: 720;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.address {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 16px;
+  color: var(--text);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.services {
+  display: grid;
+  gap: 8px;
+}
+
+.serviceList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.serviceList li {
+  max-width: 100%;
+  padding: 5px 9px;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #faf9f8;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.cardActions a {
+  flex: 1 1 120px;
+}
+
+.loadingRegion {
+  display: grid;
+  gap: 18px;
+}
+
+.skeletonCard {
+  justify-content: flex-start;
+}
+
+.skeletonTitle {
+  width: 64%;
+  min-height: 22px;
+  margin: 12px 0 9px;
+}
+
+.skeletonLine {
+  width: 84%;
+  margin-bottom: 8px;
+}
+
+.skeletonLineShort {
+  width: 53%;
+}
+
+.skeletonActions {
+  display: flex;
+  gap: 9px;
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.skeletonButton {
+  min-height: 40px;
+  flex: 1;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+}
+
+.pagination a {
+  min-width: 230px;
+}
+
+.pagination a span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.ownerCallout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin-top: clamp(64px, 9vw, 104px);
+  padding: clamp(26px, 4.5vw, 42px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.ownerCallout > div {
+  max-width: 66ch;
+}
+
+.ownerCallout h2 {
+  font-size: clamp(23px, 3vw, 30px);
+}
+
+.ownerCallout > a {
+  flex: 0 0 auto;
+}
+
+.loadingRegion :global(.loading-state) {
+  min-height: 24px;
+}
+
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+    gap: 30px;
+  }
+
+  .resultsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroTitle {
+    max-width: 13ch;
+  }
+
+  .searchPanel {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 560px) {
+  .main {
+    padding: 24px 0 48px;
+  }
+
+  .hero,
+  .directory,
+  .ownerCallout {
+    width: min(100% - 28px, 1200px);
+  }
+
+  .hero {
+    gap: 26px;
+    padding: 26px 20px 20px;
+    border-radius: 20px;
+  }
+
+  .hero::after {
+    top: -220px;
+    right: -200px;
+  }
+
+  .eyebrow {
+    margin-bottom: 15px;
+  }
+
+  .heroTitle {
+    max-width: 11ch;
+    font-size: clamp(38px, 12vw, 52px);
+  }
+
+  .heroDescription {
+    font-size: 16px;
+  }
+
+  .searchPanel {
+    padding: 21px 18px;
+  }
+
+  .directory {
+    margin-top: 52px;
+  }
+
+  .directoryHeading h2,
+  .ownerCallout h2 {
+    font-size: 26px;
+  }
+
+  .resultsGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .barbershopCard {
+    min-height: 0;
+    padding: 20px;
+  }
+
+  .ownerCallout {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-top: 56px;
+    padding: 25px 21px;
+  }
+
+  .ownerCallout > a {
+    width: 100%;
+  }
+}

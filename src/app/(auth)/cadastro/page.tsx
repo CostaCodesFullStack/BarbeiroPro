@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ApiError, api, errorMessage, slugify } from "@/lib/client-api";
+import PublicShell from "@/components/public/PublicShell";
 
 export default function CadastroPage() {
   const router = useRouter();
@@ -48,71 +49,73 @@ export default function CadastroPage() {
   const suggestedSlug = `${slug.slice(0, 38)}-2`;
 
   return (
-    <main className="auth">
-      <form className="card" onSubmit={onSubmit}>
-        <h1>Teste grátis por 7 dias</h1>
-        <p className="muted">
-          Crie sua conta. No próximo passo você cadastra o cartão: nada é cobrado nos 7 primeiros dias.
-        </p>
+    <PublicShell>
+      <main className="auth">
+        <form className="card" onSubmit={onSubmit}>
+          <h1>Teste grátis por 7 dias</h1>
+          <p className="muted">
+            Crie sua conta e cadastre o cartão no próximo passo. A contagem começa quando os dados do cartão são enviados ao Asaas; o acesso é liberado após a confirmação. A primeira cobrança não ocorre antes de sete dias completos e pode ser agendada para até oito dias depois.
+          </p>
 
-        <label htmlFor="name">Seu nome</label>
-        <input id="name" required minLength={2} autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} />
+          <label htmlFor="name">Seu nome</label>
+          <input id="name" required minLength={2} autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} />
 
-        <label htmlFor="email">E-mail</label>
-        <input id="email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <label htmlFor="email">E-mail</label>
+          <input id="email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-        <label htmlFor="password">Senha (mínimo 8 caracteres)</label>
-        <input id="password" type="password" required minLength={8} maxLength={72} autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <label htmlFor="password">Senha (mínimo 8 caracteres)</label>
+          <input id="password" type="password" required minLength={8} maxLength={72} autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-        <label htmlFor="shop">Nome da barbearia</label>
-        <input id="shop" required minLength={2} value={barbershopName} onChange={(e) => onShopName(e.target.value)} />
+          <label htmlFor="shop">Nome da barbearia</label>
+          <input id="shop" required minLength={2} value={barbershopName} onChange={(e) => onShopName(e.target.value)} />
 
-        <label htmlFor="slug">Endereço da página de agendamento</label>
-        <input
-          id="slug"
-          required
-          pattern="[a-z0-9\-]{3,40}"
-          title="3 a 40 caracteres: letras minúsculas, números e hífen"
-          value={slug}
-          onChange={(e) => {
-            setSlugTouched(true);
-            setSlug(slugify(e.target.value));
-          }}
-        />
-        <div className="muted">/barbearia/{slug || "sua-barbearia"}</div>
+          <label htmlFor="slug">Endereço da página de agendamento</label>
+          <input
+            id="slug"
+            required
+            pattern="[a-z0-9\-]{3,40}"
+            title="3 a 40 caracteres: letras minúsculas, números e hífen"
+            value={slug}
+            onChange={(e) => {
+              setSlugTouched(true);
+              setSlug(slugify(e.target.value));
+            }}
+          />
+          <div className="muted">/barbearia/{slug || "sua-barbearia"}</div>
 
-        {error && (
-          <div className="error" role="alert">
-            {error}
-            {errorCode === "EMAIL_TAKEN" && (
-              <div style={{ marginTop: 8 }}>
-                Já tem conta? <Link href={`/login?email=${encodeURIComponent(email)}`}>Entrar com este e-mail →</Link>
-              </div>
-            )}
-            {errorCode === "SLUG_TAKEN" && slug.length >= 1 && (
-              <div style={{ marginTop: 8 }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSlugTouched(true);
-                    setSlug(suggestedSlug);
-                    clearError();
-                  }}
-                >
-                  Usar “{suggestedSlug}”
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+          {error && (
+            <div className="error" role="alert">
+              {error}
+              {errorCode === "EMAIL_TAKEN" && (
+                <div style={{ marginTop: 8 }}>
+                  Já tem conta? <Link href={`/login?email=${encodeURIComponent(email)}`}>Entrar com este e-mail →</Link>
+                </div>
+              )}
+              {errorCode === "SLUG_TAKEN" && slug.length >= 1 && (
+                <div style={{ marginTop: 8 }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSlugTouched(true);
+                      setSlug(suggestedSlug);
+                      clearError();
+                    }}
+                  >
+                    Usar “{suggestedSlug}”
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
-        <button className="primary" type="submit" disabled={loading}>
-          {loading ? "Criando..." : "Criar conta"}
-        </button>
-        <p className="muted">
-          Já tem conta? <Link href="/login">Entrar</Link>
-        </p>
-      </form>
-    </main>
+          <button className="primary" type="submit" disabled={loading}>
+            {loading ? "Criando..." : "Criar conta"}
+          </button>
+          <p className="muted">
+            Já tem conta? <Link href="/login">Entrar</Link>
+          </p>
+        </form>
+      </main>
+    </PublicShell>
   );
 }

@@ -33,6 +33,49 @@ describe("canTakeBookings", () => {
     expect(canTakeBookings({ ...base, subscriptionStatus: "ACTIVE", trialEndsAt: new Date(0) })).toBe(true);
   });
 
+  it("cancelamento pago confirmado mantém acesso até a data final e bloqueia depois", () => {
+    const accessEndsAt = new Date(now.getTime() + day);
+    expect(canTakeBookings({
+      ...base,
+      subscriptionStatus: "ACTIVE",
+      accessEndsAt,
+      cancellationConfirmed: true,
+    })).toBe(true);
+    expect(canTakeBookings({
+      ...base,
+      subscriptionStatus: "ACTIVE",
+      accessEndsAt,
+      cancellationConfirmed: true,
+      now: accessEndsAt,
+    })).toBe(false);
+  });
+
+  it("solicitação de cancelamento ainda não confirmada não corta acesso", () => {
+    expect(canTakeBookings({
+      ...base,
+      subscriptionStatus: "ACTIVE",
+      accessEndsAt: new Date(now.getTime() - day),
+      cancellationConfirmed: false,
+    })).toBe(true);
+  });
+
+  it("cancelamento em atraso preserva somente a tolerância de cinco dias", () => {
+    const accessEndsAt = new Date(now.getTime() + day);
+    expect(canTakeBookings({
+      ...base,
+      subscriptionStatus: "PAST_DUE",
+      accessEndsAt,
+      cancellationConfirmed: true,
+    })).toBe(true);
+    expect(canTakeBookings({
+      ...base,
+      subscriptionStatus: "PAST_DUE",
+      accessEndsAt,
+      cancellationConfirmed: true,
+      now: accessEndsAt,
+    })).toBe(false);
+  });
+
   it("em atraso aceita só durante a tolerância de 5 dias", () => {
     const dentro = new Date(now.getTime() - 4 * day);
     const fora = new Date(now.getTime() - 6 * day);

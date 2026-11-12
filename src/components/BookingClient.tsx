@@ -20,6 +20,38 @@ type Confirmation = {
   tenant: TenantInfo;
 };
 
+function effectivePrice(service: Service, professional: Professional): number {
+  return professional.services.find((link) => link.serviceId === service.id)?.customPriceCents ?? service.priceCents;
+}
+
+function servicePriceRange(service: Service, professionals: Professional[]) {
+  const prices = professionals
+    .filter((professional) => professional.services.some((link) => link.serviceId === service.id))
+    .map((professional) => effectivePrice(service, professional));
+
+  if (prices.length === 0) return { minPriceCents: service.priceCents, maxPriceCents: service.priceCents };
+
+  return prices.reduce(
+    (range, price) => ({
+      minPriceCents: Math.min(range.minPriceCents, price),
+      maxPriceCents: Math.max(range.maxPriceCents, price),
+    }),
+    { minPriceCents: prices[0], maxPriceCents: prices[0] },
+  );
+}
+
+function servicePriceDisplay(service: Service, professionals: Professional[], selectedProfessional?: Professional) {
+  const { minPriceCents, maxPriceCents } = servicePriceRange(service, professionals);
+  const selectedPriceCents = selectedProfessional ? effectivePrice(service, selectedProfessional) : null;
+
+  return {
+    minPriceCents,
+    maxPriceCents,
+    shownPriceCents: selectedPriceCents ?? minPriceCents,
+    hasPriceRange: selectedPriceCents === null && minPriceCents !== maxPriceCents,
+  };
+}
+
 function chip(date: string) {
   const dt = new Date(`${date}T12:00:00Z`);
   const wd = dt.toLocaleDateString("pt-BR", { weekday: "short", timeZone: "UTC" }).replace(".", "");
@@ -184,7 +216,7 @@ export default function BookingClient({ slug }: { slug: string }) {
   const selectedService = data.services.find((s) => s.id === serviceId);
   const selectedPro = proOptions.find((p) => p.id === proId);
   const price = selectedService
-    ? (selectedPro?.services.find((l) => l.serviceId === serviceId)?.customPriceCents ?? selectedService.priceCents)
+    ? (selectedPro ? effectivePrice(selectedService, selectedPro) : selectedService.priceCents)
     : 0;
 
   return (
@@ -196,16 +228,35 @@ export default function BookingClient({ slug }: { slug: string }) {
         <p className="step-title">1. Escolha o serviço</p>
         {data.services
           .filter((s) => data.professionals.some((p) => p.services.some((l) => l.serviceId === s.id)))
-          .map((s) => (
-            <button key={s.id} className={`opt${s.id === serviceId ? " active" : ""}`} onClick={() => pickService(s.id)}>
-              <span>
-                <strong>{s.name}</strong>
-                <br />
-                <span className="muted">{s.durationMin} min</span>
-              </span>
-              <span className="price">{formatBRL(s.priceCents)}</span>
-            </button>
-          ))}
+          .map((s) => {
+            const { minPriceCents, maxPriceCents, shownPriceCents, hasPriceRange } = servicePriceDisplay(
+              s,
+              data.professionals,
+              s.id === serviceId ? selectedPro : undefined,
+            );
+
+            return (
+              <button key={s.id} className={`opt${s.id === serviceId ? " active" : ""}`} onClick={() => pickService(s.id)}>
+                <span>
+                  <strong>{s.name}</strong>
+                  <br />
+                  <span className="muted">{s.durationMin} min</span>
+                </span>
+                <span
+                  className="price"
+                  aria-label={
+                    hasPriceRange
+                      ? `Faixa de preço: ${formatBRL(minPriceCents)} a ${formatBRL(maxPriceCents)}`
+                      : `Preço: ${formatBRL(shownPriceCents)}`
+                  }
+                >
+                  {hasPriceRange
+                    ? `${formatBRL(minPriceCents)} – ${formatBRL(maxPriceCents)}`
+                    : formatBRL(shownPriceCents)}
+                </span>
+              </button>
+            );
+          })}
       </div>
 
       {serviceId && proOptions.length > 1 && (

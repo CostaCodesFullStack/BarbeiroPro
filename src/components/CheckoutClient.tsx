@@ -60,9 +60,12 @@ export default function CheckoutClient({ defaultName }: { defaultName: string })
     <form className="card" onSubmit={submit} autoComplete="on">
       <h2>Ative sua conta</h2>
       <p>
-        <strong>7 dias grátis.</strong> Seu cartão é validado agora, mas a primeira cobrança de{" "}
-        <strong>{formatBRL(PRICE_CENTS)}</strong> só acontece no 8º dia, e depois todo mês. Cancele quando quiser.
+        <strong>7 dias grátis.</strong> A contagem começa quando você envia os dados do cartão ao Asaas; o acesso é liberado após a confirmação.
+        Seu cartão é validado agora; a primeira cobrança de <strong>{formatBRL(PRICE_CENTS)}</strong> só acontece
+        depois de pelo menos sete dias completos. A data exata aparece no painel e, como o Asaas agenda por data,
+        o intervalo pode chegar a oito dias. Depois, a cobrança é mensal.
       </p>
+      <p className="muted">Você pode cancelar pelo painel. Durante o teste, o acesso termina após a confirmação do cancelamento; depois de uma cobrança, permanece até o fim do período pago.</p>
       <p className="muted">Com a conta ativa você libera o cadastro de serviços e profissionais.</p>
 
       <h3 style={{ marginTop: 20 }}>Cartão de crédito</h3>
@@ -101,7 +104,7 @@ export default function CheckoutClient({ defaultName }: { defaultName: string })
 
       {error && <div className="error" role="alert">{error}</div>}
       <button className="primary" type="submit" disabled={saving}>
-        {saving ? "Validando cartão..." : "Começar meus 7 dias grátis"}
+        {saving ? "Validando cartão..." : "Começar teste grátis"}
       </button>
       <p className="legal">
         Pagamento processado pelo Asaas. O BarbeiroPro não guarda os dados do seu cartão.

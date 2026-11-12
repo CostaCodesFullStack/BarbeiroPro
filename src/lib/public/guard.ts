@@ -32,7 +32,7 @@ export async function findPublicTenant(slug: string) {
       address: true,
       status: true,
       trialEndsAt: true,
-      subscription: { select: { status: true, currentPeriodEnd: true } },
+      subscription: { select: { status: true, currentPeriodEnd: true, accessEndsAt: true, cancellationConfirmed: true } },
     },
   });
   if (!tenant) return null;
@@ -42,6 +42,8 @@ export async function findPublicTenant(slug: string) {
     subscriptionStatus: tenant.subscription?.status ?? null,
     trialEndsAt: tenant.trialEndsAt,
     currentPeriodEnd: tenant.subscription?.currentPeriodEnd ?? null,
+    accessEndsAt: tenant.subscription?.accessEndsAt ?? null,
+    cancellationConfirmed: tenant.subscription?.cancellationConfirmed ?? false,
   });
   return { ...tenant, bookable };
 }

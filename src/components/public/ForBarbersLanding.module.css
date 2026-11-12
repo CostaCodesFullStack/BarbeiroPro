@@ -1,0 +1,633 @@
+.main {
+  padding: 36px 0 82px;
+}
+
+.hero,
+.capabilities,
+.startSection,
+.priceSection,
+.finalCallout {
+  width: min(1200px, calc(100% - 48px));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+  align-items: center;
+  gap: clamp(44px, 7vw, 94px);
+  min-height: 500px;
+  padding: clamp(40px, 6.4vw, 78px);
+  overflow: hidden;
+  border: 1px solid #e8e2dc;
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse at 99% 0%, rgb(168 78 38 / 9%), transparent 37%),
+    linear-gradient(130deg, #fff 0%, #fff 60%, #f7f1eb 100%);
+  box-shadow: var(--shadow-soft);
+}
+
+.heroCopy {
+  position: relative;
+  z-index: 1;
+  max-width: 610px;
+}
+
+.eyebrow,
+.sectionKicker {
+  margin: 0;
+  color: var(--brand);
+  font-size: 11px;
+  font-weight: 760;
+  letter-spacing: 0.13em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 23px;
+}
+
+.eyebrowMark {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--brand);
+  transform: rotate(45deg);
+}
+
+.heroTitle {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(44px, 5.8vw, 72px);
+  font-weight: 760;
+  letter-spacing: -0.068em;
+  line-height: 0.99;
+}
+
+.heroDescription {
+  max-width: 53ch;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: clamp(16px, 1.6vw, 18px);
+  line-height: 1.7;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.heroActions a,
+.priceCard a,
+.finalCallout > a {
+  min-height: 48px;
+  padding: 12px 17px;
+}
+
+.heroActions a span,
+.priceCard a span,
+.finalCallout > a span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.heroNote {
+  margin: 14px 0 0;
+  color: #59524d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.featurePanel {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  padding: 25px;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 21px;
+  background: #272321;
+  color: #fff;
+  box-shadow: 0 24px 60px rgb(43 31 25 / 19%);
+}
+
+.panelTopline,
+.panelModule {
+  display: flex;
+  align-items: center;
+}
+
+.panelTopline {
+  position: relative;
+  z-index: 1;
+  gap: 10px;
+  color: #f4eee8;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.panelLogo {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border-radius: 9px;
+  background: #a84e26;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.panelStatus {
+  margin-left: auto;
+  color: #d5cbc2;
+  font-size: 10px;
+  font-weight: 550;
+}
+
+.panelHeading {
+  position: relative;
+  z-index: 1;
+  max-width: 17ch;
+  margin: 39px 0 21px;
+  font-size: clamp(22px, 2.6vw, 29px);
+  font-weight: 680;
+  letter-spacing: -0.045em;
+  line-height: 1.13;
+}
+
+.panelModules {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 9px;
+}
+
+.panelModule {
+  min-width: 0;
+  gap: 12px;
+  padding: 13px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 5%);
+}
+
+.moduleIcon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 1px solid rgb(238 153 110 / 48%);
+  border-radius: 10px;
+  color: #f0a47e;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.panelModule > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.panelModule strong {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 680;
+}
+
+.panelModule small {
+  overflow-wrap: anywhere;
+  color: #d6cec8;
+  font-size: 11px;
+}
+
+.moduleArrow {
+  margin-left: auto;
+  color: #f0a47e;
+  font-size: 16px;
+}
+
+.panelCaption {
+  position: relative;
+  z-index: 1;
+  margin: 17px 0 0;
+  color: #d6cec8;
+  font-size: 11px;
+}
+
+.panelOrbit {
+  position: absolute;
+  z-index: -1;
+  top: -95px;
+  right: -130px;
+  width: 300px;
+  height: 300px;
+  border: 1px solid rgb(240 164 126 / 18%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 24px rgb(240 164 126 / 5%), 0 0 0 49px rgb(240 164 126 / 3%);
+}
+
+.capabilities {
+  padding-top: clamp(78px, 10vw, 124px);
+}
+
+.sectionHeading {
+  max-width: 620px;
+  margin-bottom: 28px;
+}
+
+.sectionHeading h2,
+.startIntro h2,
+.priceCopy h2,
+.finalCallout h2 {
+  margin: 10px 0 0;
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 735;
+  letter-spacing: -0.055em;
+  line-height: 1.08;
+}
+
+.sectionHeading > p:last-child,
+.startIntro > p:last-child,
+.priceCopy > p:last-child {
+  margin: 13px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.capabilityGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.capabilityCard {
+  display: flex;
+  min-width: 0;
+  min-height: 252px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 25px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgb(29 23 20 / 3%);
+}
+
+.cardNumber {
+  display: grid;
+  width: 35px;
+  height: 35px;
+  place-items: center;
+  border-radius: 10px;
+  background: #f7ede7;
+  color: #873a1b;
+  font-size: 11px;
+  font-weight: 780;
+}
+
+.capabilityCard h3,
+.steps h3 {
+  margin: 21px 0 0;
+  font-size: 18px;
+  font-weight: 710;
+  letter-spacing: -0.025em;
+}
+
+.capabilityCard p,
+.steps p {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.cardDetail {
+  margin-top: auto;
+  padding-top: 22px;
+  color: #873a1b;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.startSection {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: start;
+  gap: clamp(40px, 9vw, 120px);
+  padding: clamp(78px, 10vw, 124px) 0;
+}
+
+.startIntro {
+  max-width: 440px;
+}
+
+.steps {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+
+.steps li {
+  display: flex;
+  gap: 17px;
+  padding: 21px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.steps li > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 1px solid #d8a58d;
+  border-radius: 50%;
+  color: #873a1b;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.steps h3 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.steps p {
+  margin-top: 5px;
+}
+
+.priceSection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.72fr);
+  align-items: center;
+  gap: clamp(36px, 9vw, 120px);
+  padding: clamp(32px, 6vw, 66px);
+  border: 1px solid #e8e2dc;
+  border-radius: 24px;
+  background: #f3ece6;
+}
+
+.priceCopy {
+  max-width: 490px;
+}
+
+.priceCard {
+  padding: 25px;
+  border: 1px solid #e7e0da;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 36px rgb(43 31 25 / 7%);
+}
+
+.priceLabel {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.priceValue {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin: 10px 0 0;
+  font-size: clamp(34px, 4vw, 45px);
+  font-weight: 760;
+  letter-spacing: -0.065em;
+  line-height: 1;
+}
+
+.priceValue > span {
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+
+.priceValue small {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 550;
+  letter-spacing: 0;
+}
+
+.priceTrial {
+  margin: 17px 0 0;
+  color: #873a1b;
+  font-size: 13px;
+  font-weight: 740;
+}
+
+.priceFinePrint {
+  margin: 8px 0 21px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.priceCard > a {
+  width: 100%;
+}
+
+.finalCallout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: clamp(78px, 10vw, 124px);
+  padding: clamp(27px, 4.5vw, 44px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.finalCallout > div {
+  max-width: 660px;
+}
+
+.finalCallout h2 {
+  max-width: 20ch;
+  font-size: clamp(24px, 3vw, 32px);
+}
+
+.finalCallout > a {
+  flex: 0 0 auto;
+}
+
+.heroActions a:focus-visible,
+.priceCard a:focus-visible,
+.finalCallout > a:focus-visible {
+  outline: 3px solid #542613;
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(290px, 0.8fr);
+    gap: 34px;
+    padding: 44px;
+  }
+
+  .heroTitle {
+    font-size: clamp(42px, 6vw, 58px);
+  }
+
+  .featurePanel {
+    padding: 20px;
+  }
+
+  .capabilityGrid {
+    gap: 12px;
+  }
+
+  .capabilityCard {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .main {
+    padding-top: 22px;
+    padding-bottom: 56px;
+  }
+
+  .hero,
+  .capabilities,
+  .startSection,
+  .priceSection,
+  .finalCallout {
+    width: min(100% - 32px, 1200px);
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    min-height: 0;
+    padding: 32px 25px 25px;
+    border-radius: 22px;
+  }
+
+  .heroTitle {
+    max-width: 12ch;
+    font-size: clamp(43px, 10vw, 58px);
+  }
+
+  .heroDescription {
+    margin-top: 17px;
+    font-size: 16px;
+  }
+
+  .heroActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .heroActions a {
+    width: 100%;
+  }
+
+  .featurePanel {
+    padding: 20px;
+  }
+
+  .panelHeading {
+    margin-top: 30px;
+  }
+
+  .capabilities {
+    padding-top: 70px;
+  }
+
+  .sectionHeading h2,
+  .startIntro h2,
+  .priceCopy h2 {
+    font-size: clamp(29px, 8vw, 38px);
+  }
+
+  .capabilityGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 11px;
+  }
+
+  .capabilityCard {
+    min-height: 0;
+    padding: 21px;
+  }
+
+  .cardDetail {
+    padding-top: 17px;
+  }
+
+  .startSection {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding: 70px 0;
+  }
+
+  .priceSection {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 25px;
+    padding: 26px 20px 20px;
+    border-radius: 19px;
+  }
+
+  .priceCard {
+    padding: 21px;
+  }
+
+  .finalCallout {
+    align-items: stretch;
+    flex-direction: column;
+    margin-top: 70px;
+    padding: 25px 21px;
+  }
+
+  .finalCallout > a {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero,
+  .capabilities,
+  .startSection,
+  .priceSection,
+  .finalCallout {
+    width: min(100% - 24px, 1200px);
+  }
+
+  .hero {
+    padding: 27px 19px 19px;
+  }
+
+  .heroTitle {
+    font-size: 41px;
+  }
+
+  .panelStatus {
+    font-size: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroActions a,
+  .priceCard a,
+  .finalCallout > a {
+    scroll-behavior: auto;
+    transition: none;
+  }
+}

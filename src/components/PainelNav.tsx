@@ -18,13 +18,18 @@ export default function PainelNav({
     { href: "/painel/assinatura", label: "Assinatura", show: canSubscribe, exact: false },
   ];
   return (
-    <nav className="nav">
+    <nav className="nav dashboard-nav" aria-label="Navegação do painel">
       {items
         .filter((i) => i.show)
         .map((i) => {
           const active = i.exact ? pathname === i.href : pathname.startsWith(i.href);
           return (
-            <Link key={i.href} href={i.href} className={active ? "active" : undefined}>
+            <Link
+              key={i.href}
+              href={i.href}
+              className={active ? "active" : undefined}
+              aria-current={active ? "page" : undefined}
+            >
               {i.label}
             </Link>
           );

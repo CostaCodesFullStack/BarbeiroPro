@@ -1,15 +1,28 @@
-import Link from "next/link";
+import MarketplaceExperience from "@/components/public/MarketplaceExperience";
 
-export default function Home() {
+type SearchParams = Record<string, string | string[] | undefined>;
+
+function readSearchValue(value: string | string[] | undefined): string {
+  return typeof value === "string" ? value : "";
+}
+
+export const metadata = {
+  title: "Encontre sua barbearia | BarbeiroPro",
+  description: "Descubra barbearias e pesquise pelos serviços que você procura.",
+};
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+
   return (
-    <main className="auth">
-      <div className="card">
-        <h1>BarbeiroPro</h1>
-        <p className="muted">Agenda, clientes e financeiro da sua barbearia em um só lugar.</p>
-        <p>
-          <Link href="/cadastro">Teste grátis por 7 dias</Link> · <Link href="/login">Entrar</Link>
-        </p>
-      </div>
-    </main>
+    <MarketplaceExperience
+      name={readSearchValue(params.name)}
+      service={readSearchValue(params.service)}
+      after={readSearchValue(params.after)}
+    />
   );
 }
